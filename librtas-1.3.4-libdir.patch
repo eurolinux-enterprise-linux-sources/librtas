@@ -1,0 +1,21 @@
+diff -up librtas-1.3.5/rules.mk.libdir librtas-1.3.5/rules.mk
+--- librtas-1.3.5/rules.mk.libdir	2010-01-28 20:04:30.000000000 +0100
++++ librtas-1.3.5/rules.mk	2011-08-09 15:47:16.842521606 +0200
+@@ -145,7 +145,7 @@ define install_sbin
+ endef
+ 
+ define install_lib
+-	$(call install_files,$1,755,$2/$(LIB_DIR)$(call is_lib64,$1))
++	$(call install_files,$1,755,$2/$(LIB_DIR))
+ endef
+ 
+ define install_inc
+@@ -188,7 +188,7 @@ define uninstall_sbin
+ endef
+ 
+ define uninstall_lib
+-	$(call uninstall_files,$1,$2/$(LIB_DIR)$(call is_lib64,$1))
++	$(call uninstall_files,$1,$2/$(LIB_DIR))
+ endef
+ 
+ define uninstall_inc
