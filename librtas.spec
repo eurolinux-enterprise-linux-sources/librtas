@@ -1,7 +1,7 @@
 Summary: Libraries to provide access to RTAS calls and RTAS events
 Name:    librtas
 Version: 1.3.8
-Release: 2%{?dist}
+Release: 6%{?dist}
 URL:     http://librtas.ozlabs.org
 License: CPL
 Group:   System Environment/Libraries
@@ -36,9 +36,15 @@ developing programs using librtas.
 %setup
 %patch0 -p1 -b .libdir
 %patch1 -p1 -b .ln
+find . -name "*.so.*" -print -delete
+
 
 %build
-%{__make} CFLAGS="%{optflags} -fPIC -DPIC -I." %{?_smp_mflags}
+# disable "-Werror=format-security" checking gcc option until we fix
+# these errors in our code.
+CFLAGS="%{optflags} -fPIC -DPIC -I."
+CFLAGS=`echo $CFLAGS | sed 's/-Werror=format-security//'`
+%{__make} CFLAGS="$CFLAGS" %{?_smp_mflags}
 
 %install
 mkdir -p %{buildroot}/%{_libdir}
@@ -72,6 +78,21 @@ mkdir -p %{buildroot}/%{_libdir}
 %{_libdir}/libofdt.so
 
 %changelog
+* Wed Mar 19 2014 Karsten Hopp <karsten@redhat.com> 1.3.8-6
+- delete all *.so.* files after unpacking the tarball to make sure they get rebuilt
+- Resolves: rhbz 1024888
+
+* Fri Mar 07 2014 Karsten Hopp <karsten@redhat.com> 1.3.8-5
+- fix CFLAGS
+- Related: rhbz 1024888
+
+* Fri Mar 07 2014 Karsten Hopp <karsten@redhat.com> 1.3.8-4
+- remove precompiled binaries before building
+- Resolves: rhbz 1024888
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.3.8-3
+- Mass rebuild 2013-12-27
+
 * Tue Jul 30 2013 Filip Kocina <fkocina@redhat.com> - 1.3.8-2
 - Source URL fix
 
